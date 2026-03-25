@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Odd One Out — 3 belong. 1 doesn't. You pick.</title>
+  <meta name="description" content="3 belong. 1 doesn't. You pick. The trivia game that tests what you really know across Sports, Gaming, and Pop Culture.">
+  <meta property="og:title" content="Odd One Out">
+  <meta property="og:description" content="3 belong. 1 doesn't. You pick.">
+  <meta property="og:url" content="https://oddoneout.app">
+  <meta name="twitter:card" content="summary_large_image">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #0a0a0a;
+      --white: #f5f5f0;
+      --gray: #888;
+      --light-gray: #e8e8e3;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Georgia', serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Grain overlay ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.4;
+    }
+
+    /* ── Layout ── */
+    .page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 24px;
+      position: relative;
+    }
+
+    /* ── Decorative rule ── */
+    .rule {
+      width: 1px;
+      height: 80px;
+      background: linear-gradient(to bottom, transparent, var(--gray), transparent);
+      margin: 0 auto 48px;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.2s forwards;
+    }
+
+    /* ── Logo / title block ── */
+    .title-block {
+      text-align: center;
+      margin-bottom: 40px;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.4s forwards;
+    }
+
+    .logo {
+      font-family: Impact, 'Arial Narrow', sans-serif;
+      font-size: clamp(64px, 15vw, 140px);
+      font-weight: 900;
+      letter-spacing: -3px;
+      line-height: 0.9;
+      color: var(--white);
+      position: relative;
+      display: inline-block;
+    }
+
+    .subtitle {
+      font-family: Impact, 'Arial Narrow', sans-serif;
+      font-size: clamp(18px, 4vw, 28px);
+      letter-spacing: 4px;
+      color: var(--gray);
+      margin-top: 12px;
+      text-transform: uppercase;
+    }
+
+    /* ── Tagline ── */
+    .tagline {
+      font-family: Georgia, serif;
+      font-size: clamp(15px, 2.5vw, 20px);
+      color: var(--light-gray);
+      text-align: center;
+      line-height: 1.7;
+      max-width: 420px;
+      margin: 0 auto 48px;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.6s forwards;
+    }
+
+    .tagline strong {
+      color: var(--white);
+      font-style: normal;
+    }
+
+    /* ── Category pills ── */
+    .categories {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 56px;
+      max-width: 500px;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.8s forwards;
+    }
+
+    .pill {
+      font-family: 'Courier New', monospace;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gray);
+      border: 1px solid #2a2a2a;
+      padding: 6px 14px;
+      border-radius: 100px;
+      white-space: nowrap;
+      text-decoration: none;
+      transition: border-color 0.2s, color 0.2s;
+      cursor: default;
+    }
+
+    .pill.playable {
+      cursor: pointer;
+    }
+
+    .pill.playable:hover {
+      border-color: #f5f5f0;
+      color: var(--white);
+    }
+
+    /* ── Footer ── */
+    footer {
+      position: absolute;
+      bottom: 24px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-family: 'Courier New', monospace;
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      color: #333;
+      text-transform: uppercase;
+    }
+
+    /* ── Animations ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 480px) {
+      .page { padding: 40px 20px; }
+      .rule { display: none; }
+      .categories { gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="rule"></div>
+
+    <div class="title-block">
+      <div class="logo">ODD ONE OUT</div>
+      <div class="subtitle">Imposter</div>
+    </div>
+
+    <p class="tagline">
+      <strong>3 belong. 1 doesn't.</strong><br>
+      You pick.
+    </p>
+
+    <div class="categories">
+      <a class="pill playable" href="/nba">NBA</a>
+      <span class="pill">MLB</span>
+      <span class="pill">NFL</span>
+      <span class="pill">Pokemon</span>
+      <span class="pill">Smash Bros</span>
+      <span class="pill">MCU</span>
+      <span class="pill">Harry Potter</span>
+    </div>
+
+    <footer>oddoneout.app &nbsp;·&nbsp; © 2026</footer>
+  </div>
+</body>
+</html>
