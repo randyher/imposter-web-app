@@ -472,8 +472,12 @@ async function fetchQuestions(){
       'Authorization': `Bearer ${SUPABASE_KEY}`
     }
   });
-  if(!res.ok) throw new Error('Fetch failed');
+  if(!res.ok){
+    alert('Fetch failed: HTTP ' + res.status);
+    throw new Error('Fetch failed');
+  }
   const data = await res.json();
+  alert('Supabase returned: ' + JSON.stringify(data).substring(0, 200));
   if(!data.length || !data[0].questions) return null;
   return data[0].questions;
 }
