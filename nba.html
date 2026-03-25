@@ -6,17 +6,22 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
-    <title>Daily Imposter — NBA</title>
+    <title>NBA · Odd One Out</title>
     <meta
       name="description"
       content="3 belong. 1 doesn't. NBA Edition — Daily Imposter"
     />
-    <meta property="og:title" content="Daily Imposter — NBA Edition" />
+    <meta property="og:title" content="NBA · Odd One Out" />
     <meta
       property="og:description"
-      content="3 belong. 1 doesn't. Can you spot the imposter?"
+      content="3 belong. 1 doesn't. Figure it out daily."
     />
-    <meta name="theme-color" content="#ffffff" />
+    <meta name="theme-color" content="#0A0C10" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Oswald:wght@600;700&family=Syne:wght@700;800&display=swap"
+      rel="stylesheet"
+    />
     <style>
       * {
         box-sizing: border-box;
@@ -24,28 +29,58 @@
         padding: 0;
         -webkit-tap-highlight-color: transparent;
       }
+
       :root {
-        --black: #0a0a0a;
-        --white: #f5f5f0;
-        --gray: #888;
-        --light: #e8e8e3;
-        --border: #e0e0da;
-        --amber: #f5c842;
-        --amber-dark: #c49a00;
-        --green: #2d7a3a;
-        --red: #c0392b;
-        --font-impact: Impact, "Arial Narrow", sans-serif;
-        --font-body: "Georgia", serif;
+        --color-bg: #0a0c10;
+        --color-surface: #16161a;
+        --color-surface-2: #1e1e24;
+        --color-volt: #c6f135;
+        --color-volt-glow: rgba(198, 241, 53, 0.07);
+        --color-volt-tint: rgba(198, 241, 53, 0.08);
+        --color-volt-border: rgba(198, 241, 53, 0.2);
+        --color-text-primary: #f4f4f6;
+        --color-text-game: #b8bcce;
+        --color-text-secondary: #8b8fa8;
+        --color-text-tertiary: #555555;
+        --color-text-ghost: rgba(255, 255, 255, 0.2);
+        --color-correct: #1db954;
+        --color-correct-bg: rgba(29, 185, 84, 0.13);
+        --color-correct-border: rgba(29, 185, 84, 0.4);
+        --color-correct-tint: rgba(29, 185, 84, 0.08);
+        --color-correct-subtle: rgba(29, 185, 84, 0.2);
+        --color-wrong: #e8453c;
+        --color-wrong-bg: rgba(232, 69, 60, 0.13);
+        --color-wrong-border: rgba(232, 69, 60, 0.4);
+        --color-wrong-tint: rgba(232, 69, 60, 0.08);
+        --color-wrong-subtle: rgba(232, 69, 60, 0.2);
+        --color-border: rgba(255, 255, 255, 0.07);
+        --color-border-medium: rgba(255, 255, 255, 0.12);
+        --color-border-subtle: rgba(255, 255, 255, 0.05);
+        --font-display: "Oswald", sans-serif;
+        --font-game: "Syne", sans-serif;
+        --texture: repeating-linear-gradient(
+          -45deg,
+          transparent,
+          transparent 3px,
+          rgba(255, 255, 255, 0.03) 3px,
+          rgba(255, 255, 255, 0.03) 4px
+        );
+        --radius-btn: 4px;
+        --radius-tile: 4px;
+        --radius-card: 16px;
+        --radius-pill: 6px;
       }
+
       html,
       body {
         height: 100%;
         overflow: hidden;
       }
       body {
-        background: var(--white);
-        color: var(--black);
-        font-family: var(--font-body);
+        background-color: var(--color-bg);
+        background-image: var(--texture);
+        color: var(--color-text-primary);
+        font-family: var(--font-game);
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -59,398 +94,189 @@
         display: none;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
         width: 100%;
-        max-width: 420px;
+        max-width: 480px;
         min-height: 100vh;
         min-height: 100dvh;
-        padding: 32px 24px;
-        text-align: center;
+        padding: 0 20px;
+        position: relative;
       }
       .screen.active {
         display: flex;
       }
 
       /* ── LOBBY ── */
-      .badge {
-        display: inline-block;
-        font-family: var(--font-impact);
-        font-size: 13px;
-        letter-spacing: 2px;
-        color: var(--amber-dark);
-        background: var(--amber);
-        padding: 5px 16px;
-        border-radius: 100px;
-        margin-bottom: 24px;
-      }
-      .logo-wrap {
-        margin-bottom: 24px;
-        position: relative;
-      }
-      .daily-label {
-        font-family: var(--font-impact);
-        font-size: 22px;
-        letter-spacing: 6px;
-        color: var(--black);
-        margin-bottom: 2px;
-      }
-      .logo {
-        font-family: var(--font-impact);
-        font-size: clamp(56px, 18vw, 82px);
-        letter-spacing: -2px;
-        line-height: 0.9;
-        color: var(--black);
-        position: relative;
-        display: inline-block;
-      }
-      .tagline {
-        font-size: 16px;
-        color: var(--gray);
-        margin-bottom: 8px;
-        line-height: 1.5;
-      }
-      .scoring {
-        display: flex;
-        gap: 20px;
+      #screen-lobby {
         justify-content: center;
-        margin-bottom: 36px;
-        font-size: 13px;
-        color: var(--gray);
-      }
-      .scoring b {
-        color: var(--black);
-      }
-      .hint-row {
-        display: flex;
         align-items: center;
-        gap: 10px;
-        margin-bottom: 32px;
-        font-size: 13px;
-        color: var(--gray);
+        padding: 32px 20px;
       }
-      .hint-pill {
-        font-size: 11px;
-        padding: 3px 10px;
-        border-radius: 100px;
-        background: var(--light);
-        color: var(--gray);
-        letter-spacing: 0.05em;
+      .home-glow {
+        position: absolute;
+        top: 80px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 280px;
+        height: 280px;
+        background: radial-gradient(
+          circle,
+          var(--color-volt-glow) 0%,
+          transparent 70%
+        );
+        pointer-events: none;
+        z-index: 0;
       }
-      .btn-start {
-        width: 100%;
-        padding: 18px;
-        font-family: var(--font-impact);
-        font-size: 22px;
-        letter-spacing: 3px;
-        background: var(--black);
-        color: var(--white);
-        border: none;
-        border-radius: 12px;
-        cursor: pointer;
-        transition: opacity 0.15s, transform 0.1s;
-      }
-      .btn-start:hover {
-        opacity: 0.88;
-      }
-      .btn-start:active {
-        transform: scale(0.98);
-      }
-
-      /* ── GAME ── */
-      #screen-game {
-        justify-content: flex-start;
-        padding-top: env(safe-area-inset-top, 20px);
-      }
-      .game-top {
-        width: 100%;
+      .home-content {
         display: flex;
+        flex-direction: column;
         align-items: center;
-        justify-content: space-between;
-        padding: 16px 0 12px;
-        margin-bottom: 8px;
+        justify-content: center;
+        gap: 0;
+        position: relative;
+        z-index: 1;
+        width: 100%;
       }
-      .timer-wrap {
-        text-align: center;
+      .logo-stack {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 20px;
       }
-      .timer {
-        font-family: var(--font-impact);
-        font-size: 36px;
-        letter-spacing: 1px;
+      .logo-nba {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: clamp(52px, 18vw, 72px);
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        color: var(--color-volt);
         line-height: 1;
       }
-      .timer.urgent {
-        color: var(--red);
+      .logo-game {
+        font-family: var(--font-game);
+        font-weight: 800;
+        font-size: clamp(24px, 8vw, 36px);
+        letter-spacing: -0.02em;
+        color: var(--color-text-game);
+        line-height: 1.05;
       }
-      .q-counter {
-        font-size: 11px;
-        color: var(--gray);
-        letter-spacing: 0.1em;
-        margin-top: 2px;
-      }
-      .score-display {
-        font-family: var(--font-impact);
-        font-size: 28px;
-        letter-spacing: 1px;
-        text-align: right;
-      }
-      .score-label {
-        font-size: 11px;
-        color: var(--gray);
-        letter-spacing: 0.1em;
-        margin-top: 2px;
-        text-align: right;
-      }
-
-      .prompt-box {
-        width: 100%;
-        background: var(--light);
-        border-radius: 10px;
-        padding: 12px 16px;
-        font-size: 14px;
-        color: var(--black);
-        margin-bottom: 16px;
-        line-height: 1.4;
-        min-height: 44px;
+      .tagline {
         display: flex;
+        flex-direction: column;
         align-items: center;
-        justify-content: center;
+        gap: 3px;
+        margin-bottom: 32px;
       }
-
-      .cards {
-        width: 100%;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-        margin-bottom: 16px;
+      .tagline-line1 {
+        font-family: var(--font-game);
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--color-text-tertiary);
       }
-      .card {
-        background: var(--white);
-        border: 1.5px solid var(--border);
-        border-radius: 12px;
-        padding: 18px 12px;
-        font-family: var(--font-impact);
-        font-size: clamp(14px, 4vw, 18px);
-        letter-spacing: 0.5px;
-        cursor: pointer;
-        transition: all 0.12s;
+      .tagline-line2 {
+        font-family: var(--font-game);
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--color-volt);
+      }
+      .streak-counter {
+        font-family: var(--font-display);
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--color-text-ghost);
         text-align: center;
-        line-height: 1.2;
-        min-height: 72px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        user-select: none;
-      }
-      .card:hover {
-        border-color: #aaa;
-        background: #f0f0eb;
-      }
-      .card:active {
-        transform: scale(0.97);
-      }
-      .card.correct {
-        background: #e8f5ea;
-        border-color: var(--green);
-        color: var(--green);
-      }
-      .card.wrong {
-        background: #fdecea;
-        border-color: var(--red);
-        color: var(--red);
-      }
-      .card.disabled {
-        pointer-events: none;
-        opacity: 0.5;
-      }
-
-      .expl-box {
-        width: 100%;
-        background: var(--light);
-        border-radius: 10px;
-        padding: 12px 16px;
-        font-size: 13px;
-        color: var(--gray);
-        margin-bottom: 12px;
-        line-height: 1.5;
-        min-height: 48px;
+        letter-spacing: 0.04em;
+        margin-top: 14px;
         display: none;
       }
-      .expl-box.show {
-        display: block;
-      }
 
-      .btn-skip {
+      /* ── BUTTONS ── */
+      .btn-primary {
         width: 100%;
-        padding: 13px;
-        font-family: var(--font-impact);
-        font-size: 16px;
-        letter-spacing: 2px;
-        background: transparent;
-        color: var(--gray);
-        border: 1.5px solid var(--border);
-        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        background: var(--color-volt);
+        color: var(--color-bg);
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 16px;
+        border-radius: var(--radius-btn);
+        border: 2px solid var(--color-volt);
         cursor: pointer;
-        transition: all 0.12s;
+        transition: transform 0.1s, background 0.1s, border-color 0.1s;
       }
-      .btn-skip:hover {
-        border-color: #aaa;
-        color: var(--black);
+      .btn-primary:hover {
+        background: #d4f84a;
+        border-color: #d4f84a;
       }
-      .btn-skip:disabled {
-        opacity: 0.3;
+      .btn-primary:active {
+        background: var(--color-bg);
+        color: var(--color-volt);
+        border-color: var(--color-volt);
+        transform: scale(0.97);
+      }
+      .btn-primary:disabled {
+        background: transparent;
+        color: #444;
+        border: 1px solid var(--color-border);
         cursor: not-allowed;
       }
 
-      /* ── RESULTS ── */
-      .result-badge-wrap {
-        margin-bottom: 8px;
-        font-size: 32px;
-      }
-      .result-score {
-        font-family: var(--font-impact);
-        font-size: 96px;
-        line-height: 1;
-        margin-bottom: 4px;
-      }
-      .result-sub {
-        font-size: 13px;
-        color: var(--gray);
-        letter-spacing: 0.15em;
-        text-transform: uppercase;
-        margin-bottom: 24px;
-      }
-      .result-emoji {
-        font-size: 20px;
-        letter-spacing: 2px;
-        margin-bottom: 8px;
-        line-height: 1.6;
-        white-space: pre;
-      }
-      .result-verdict {
-        font-family: var(--font-impact);
-        font-size: 20px;
-        letter-spacing: 2px;
-        margin-bottom: 28px;
-        color: var(--gray);
-      }
-      .btn-share {
+      .btn-ghost {
         width: 100%;
-        padding: 16px;
-        font-family: var(--font-impact);
-        font-size: 18px;
-        letter-spacing: 2px;
-        background: var(--black);
-        color: var(--white);
-        border: none;
-        border-radius: 12px;
-        cursor: pointer;
-        margin-bottom: 10px;
-        transition: opacity 0.15s;
-      }
-      .btn-share:hover {
-        opacity: 0.88;
-      }
-      .btn-outline {
-        width: 100%;
-        padding: 14px;
-        font-family: var(--font-impact);
-        font-size: 16px;
-        letter-spacing: 2px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
         background: transparent;
-        color: var(--black);
-        border: 1.5px solid var(--border);
-        border-radius: 12px;
-        cursor: pointer;
-        transition: all 0.12s;
-      }
-      .btn-outline:hover {
-        border-color: #aaa;
-      }
-      .share-toast {
-        position: fixed;
-        bottom: 40px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: var(--black);
-        color: var(--white);
-        font-family: var(--font-impact);
-        font-size: 14px;
-        letter-spacing: 1px;
-        padding: 10px 24px;
-        border-radius: 100px;
-        opacity: 0;
-        transition: opacity 0.3s;
-        pointer-events: none;
-        white-space: nowrap;
-      }
-      .share-toast.show {
-        opacity: 1;
-      }
-
-      /* ── ALREADY PLAYED ── */
-      .already-title {
-        font-family: var(--font-impact);
-        font-size: 14px;
-        letter-spacing: 3px;
-        color: var(--gray);
-        margin-bottom: 24px;
-      }
-      .already-score {
-        font-family: var(--font-impact);
-        font-size: 96px;
-        line-height: 1;
-        margin-bottom: 4px;
-      }
-      .already-sub {
-        font-size: 13px;
-        color: var(--gray);
-        letter-spacing: 0.15em;
-        text-transform: uppercase;
-        margin-bottom: 28px;
-      }
-      .next-label {
+        color: var(--color-text-secondary);
+        border: 1px solid var(--color-border);
+        font-family: var(--font-game);
+        font-weight: 700;
         font-size: 12px;
-        color: var(--gray);
-        letter-spacing: 0.15em;
         text-transform: uppercase;
-        margin-bottom: 8px;
+        letter-spacing: 0.08em;
+        padding: 13px;
+        border-radius: var(--radius-btn);
+        cursor: pointer;
+        transition: transform 0.1s, background 0.1s;
       }
-      .countdown {
-        font-family: var(--font-impact);
-        font-size: 40px;
-        letter-spacing: 2px;
-        margin-bottom: 36px;
-      }
-
-      /* ── NO QUESTIONS ── */
-      .no-q-icon {
-        font-size: 48px;
-        margin-bottom: 16px;
-      }
-      .no-q-title {
-        font-family: var(--font-impact);
-        font-size: 24px;
-        letter-spacing: 2px;
-        margin-bottom: 8px;
-      }
-      .no-q-sub {
-        font-size: 14px;
-        color: var(--gray);
-        line-height: 1.6;
+      .btn-ghost:active {
+        background: rgba(255, 255, 255, 0.08);
+        color: var(--color-text-primary);
+        transform: scale(0.97);
       }
 
       /* ── LOADING ── */
+      #screen-loading {
+        justify-content: center;
+        align-items: center;
+      }
+      .loading-logo {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 28px;
+      }
       .loading-dots {
         display: flex;
         gap: 6px;
         justify-content: center;
-        margin-top: 16px;
       }
       .loading-dots span {
-        width: 8px;
-        height: 8px;
+        width: 7px;
+        height: 7px;
         border-radius: 50%;
-        background: var(--black);
+        background: var(--color-volt);
+        opacity: 0.4;
         animation: dot 1s ease-in-out infinite;
       }
       .loading-dots span:nth-child(2) {
@@ -464,44 +290,436 @@
         80%,
         100% {
           transform: scale(0.6);
-          opacity: 0.4;
+          opacity: 0.3;
         }
         40% {
           transform: scale(1);
           opacity: 1;
         }
       }
+
+      /* ── NO QUESTIONS ── */
+      #screen-noquestions {
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 32px 24px;
+      }
+      .no-q-title {
+        font-family: var(--font-display);
+        font-size: 20px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--color-text-primary);
+        margin-bottom: 10px;
+      }
+      .no-q-sub {
+        font-family: var(--font-game);
+        font-size: 14px;
+        color: var(--color-text-secondary);
+        line-height: 1.6;
+      }
+
+      /* ── GAME SCREEN ── */
+      #screen-game {
+        justify-content: flex-start;
+        padding: 0;
+      }
+      .hud-bar {
+        width: 100%;
+        background: var(--color-surface);
+        padding: 12px 20px 10px;
+        border-bottom: 1px solid var(--color-border);
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        flex-shrink: 0;
+      }
+      .hud-col {
+        display: flex;
+        flex-direction: column;
+      }
+      .hud-col-center {
+        align-items: center;
+      }
+      .hud-col-right {
+        align-items: flex-end;
+      }
+      .hud-label {
+        font-family: var(--font-game);
+        font-size: 8px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        color: var(--color-text-tertiary);
+        margin-bottom: 2px;
+      }
+      .hud-value {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 28px;
+        line-height: 1;
+      }
+      .hud-time {
+        color: var(--color-volt);
+      }
+      .hud-time.urgent {
+        color: var(--color-wrong);
+      }
+      .hud-score {
+        color: var(--color-text-primary);
+      }
+      .hud-question {
+        color: var(--color-text-secondary);
+        font-size: 16px;
+      }
+      .timer-track {
+        width: 100%;
+        height: 3px;
+        background: rgba(255, 255, 255, 0.07);
+        flex-shrink: 0;
+      }
+      .timer-fill {
+        height: 100%;
+        width: 100%;
+        background: var(--color-volt);
+        transition: width 1s linear, background 0.3s;
+      }
+      .timer-fill.urgent {
+        background: var(--color-wrong);
+      }
+      .game-content {
+        flex: 1;
+        padding: 18px 20px 0;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        overflow-y: auto;
+      }
+      .question-prompt {
+        font-family: var(--font-display);
+        font-weight: 600;
+        font-size: 17px;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        color: var(--color-text-primary);
+        line-height: 1.25;
+        text-align: center;
+        margin-bottom: 16px;
+        padding: 12px 16px;
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-tile);
+      }
+      .options-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-bottom: 14px;
+      }
+      .card {
+        width: 100%;
+        font-family: var(--font-game);
+        font-size: 13px;
+        font-weight: 700;
+        padding: 16px;
+        border-radius: var(--radius-tile);
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--color-border);
+        color: var(--color-text-primary);
+        text-align: center;
+        cursor: pointer;
+        transition: border-color 0.1s, background 0.1s;
+        line-height: 1.3;
+      }
+      .card:hover {
+        border-color: rgba(255, 255, 255, 0.18);
+        background: rgba(255, 255, 255, 0.08);
+      }
+      .card:active {
+        transform: scale(0.98);
+      }
+      .card.correct {
+        background: var(--color-correct-bg);
+        border-color: var(--color-correct-border);
+        color: var(--color-correct);
+        cursor: default;
+      }
+      .card.wrong {
+        background: var(--color-wrong-bg);
+        border-color: var(--color-wrong-border);
+        color: var(--color-wrong);
+        cursor: default;
+      }
+      .card.disabled {
+        pointer-events: none;
+      }
+      .expl-box {
+        font-family: var(--font-game);
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--color-text-secondary);
+        line-height: 1.5;
+        margin-bottom: 12px;
+        padding: 10px 14px;
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-tile);
+        display: none;
+      }
+      .expl-box.show {
+        display: block;
+      }
+      .game-actions {
+        padding: 0 20px 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        width: 100%;
+        flex-shrink: 0;
+      }
+
+      /* ── RESULTS ── */
+      #screen-results {
+        justify-content: space-between;
+        padding: 24px 20px 28px;
+      }
+      .results-body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+      }
+      .results-date {
+        font-family: var(--font-game);
+        font-size: 9px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        color: var(--color-text-tertiary);
+        margin-bottom: 14px;
+      }
+      .badge-circle {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: var(--color-volt-tint);
+        border: 1.5px solid var(--color-volt-border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 26px;
+        margin-bottom: 10px;
+      }
+      .results-score {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 52px;
+        color: var(--color-volt);
+        line-height: 1;
+        margin-bottom: 16px;
+      }
+      .dot-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        margin-bottom: 20px;
+      }
+      .dot-row {
+        display: flex;
+        gap: 4px;
+      }
+      .dot {
+        width: 13px;
+        height: 13px;
+        border-radius: 2px;
+      }
+      .dot-correct {
+        background: var(--color-correct);
+      }
+      .dot-wrong {
+        background: var(--color-wrong);
+      }
+      .dot-skip {
+        background: rgba(255, 255, 255, 0.12);
+      }
+      .stat-rows {
+        width: 100%;
+        margin-bottom: 0;
+      }
+      .stat-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 9px 0;
+        border-bottom: 1px solid var(--color-border-subtle);
+      }
+      .stat-row:last-child {
+        border-bottom: none;
+      }
+      .stat-label {
+        font-family: var(--font-game);
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--color-text-tertiary);
+        letter-spacing: 0.04em;
+      }
+      .stat-value {
+        font-family: var(--font-display);
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--color-text-primary);
+      }
+      .stat-value.correct {
+        color: var(--color-correct);
+      }
+      .stat-value.wrong {
+        color: var(--color-wrong);
+      }
+      .results-actions {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      /* ── ALREADY PLAYED ── */
+      #screen-already {
+        justify-content: space-between;
+        padding: 24px 20px 28px;
+      }
+      .played-body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0;
+        width: 100%;
+      }
+      .played-title {
+        font-family: var(--font-game);
+        font-size: 9px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        color: var(--color-text-tertiary);
+        margin-bottom: 14px;
+      }
+      .played-score {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 52px;
+        color: var(--color-volt);
+        line-height: 1;
+        margin-bottom: 16px;
+      }
+      .played-divider {
+        width: 100%;
+        height: 1px;
+        background: var(--color-border-subtle);
+        margin: 20px 0 18px;
+      }
+      .played-next-label {
+        font-family: var(--font-game);
+        font-size: 9px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        color: var(--color-text-tertiary);
+        margin-bottom: 6px;
+      }
+      .played-countdown {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 32px;
+        color: var(--color-text-primary);
+        letter-spacing: -0.01em;
+      }
+      .played-actions {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      /* ── PILL ── */
+      .pill-volt {
+        display: inline-flex;
+        align-items: center;
+        background: var(--color-volt-tint);
+        border: 1px solid var(--color-volt-border);
+        border-radius: var(--radius-pill);
+        padding: 5px 12px;
+        font-family: var(--font-game);
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--color-volt);
+      }
+
+      /* ── SHARE TOAST ── */
+      .share-toast {
+        position: fixed;
+        bottom: 40px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--color-volt);
+        color: var(--color-bg);
+        font-family: var(--font-display);
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        padding: 10px 24px;
+        border-radius: 100px;
+        opacity: 0;
+        transition: opacity 0.3s;
+        pointer-events: none;
+        white-space: nowrap;
+      }
+      .share-toast.show {
+        opacity: 1;
+      }
     </style>
   </head>
   <body>
     <!-- LOBBY -->
     <div class="screen active" id="screen-lobby">
-      <div class="badge">NBA EDITION</div>
-      <div class="logo-wrap">
-        <div class="daily-label">DAILY</div>
-        <div class="logo">IMPOSTER</div>
+      <div class="home-glow"></div>
+      <div class="home-content">
+        <div class="logo-stack">
+          <span class="logo-nba">NBA</span>
+          <span class="logo-game">Odd One Out</span>
+        </div>
+        <div class="tagline">
+          <span class="tagline-line1">3 Belong, 1 Doesn't.</span>
+          <span class="tagline-line2">Figure It Out Daily.</span>
+        </div>
+        <button class="btn-primary" onclick="startGame()">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+            <polygon points="3,2 13,8 3,14" fill="#0A0C10" />
+          </svg>
+          Play Today
+        </button>
+        <span class="streak-counter" id="streak-display"></span>
       </div>
-      <p class="tagline">3 belong. 1 doesn't.<br />Figure it out.</p>
-      <div class="scoring">
-        <span><b>+1</b> correct</span>
-        <span><b>−1</b> wrong</span>
-        <span><b>−0.5</b> skip</span>
-      </div>
-      <button class="btn-start" onclick="startGame()">START GAME</button>
     </div>
 
     <!-- LOADING -->
     <div class="screen" id="screen-loading">
-      <div class="logo-wrap">
-        <div class="daily-label">DAILY</div>
-        <div class="logo">IMPOSTER</div>
+      <div class="loading-logo">
+        <span class="logo-nba">NBA</span>
+        <span class="logo-game">Odd One Out</span>
       </div>
       <div class="loading-dots"><span></span><span></span><span></span></div>
     </div>
 
     <!-- NO QUESTIONS -->
     <div class="screen" id="screen-noquestions">
-      <div class="no-q-title">CHECK BACK SOON</div>
+      <div class="no-q-title">Check Back Soon</div>
       <p class="no-q-sub">
         Today's challenge is on its way.<br />Come back later!
       </p>
@@ -509,77 +727,143 @@
 
     <!-- GAME -->
     <div class="screen" id="screen-game">
-      <div class="game-top">
-        <div>
-          <div class="timer" id="timer">90</div>
-          <div class="q-counter" id="q-counter">Q 1 / 15</div>
+      <div class="hud-bar">
+        <div class="hud-col">
+          <div class="hud-label">Time</div>
+          <div class="hud-value hud-time" id="timer">1:30</div>
         </div>
-        <div style="text-align: center">
-          <div class="badge" style="margin-bottom: 0; font-size: 11px">NBA</div>
+        <div class="hud-col hud-col-center">
+          <div class="hud-label">Question</div>
+          <div class="hud-value hud-question" id="q-counter">1 / 15</div>
         </div>
-        <div>
-          <div class="score-display" id="score-display">0</div>
-          <div class="score-label">SCORE</div>
+        <div class="hud-col hud-col-right">
+          <div class="hud-label">Score</div>
+          <div class="hud-value hud-score" id="score-display">0</div>
         </div>
       </div>
-
-      <div class="prompt-box" id="prompt-box"></div>
-
-      <div class="cards" id="cards"></div>
-
-      <div class="expl-box" id="expl-box"></div>
-
-      <button class="btn-skip" id="btn-skip" onclick="skipQuestion()">
-        SKIP −0.5
-      </button>
+      <div class="timer-track">
+        <div class="timer-fill" id="timer-fill"></div>
+      </div>
+      <div class="game-content">
+        <div class="question-prompt" id="prompt-box"></div>
+        <div class="options-list" id="cards"></div>
+        <div class="expl-box" id="expl-box"></div>
+      </div>
+      <div class="game-actions">
+        <button class="btn-ghost" id="btn-skip" onclick="skipQuestion()">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+            <path
+              d="M8 3V13M3 8L8 3L13 8"
+              stroke="#8B8FA8"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          Skip (−0.5)
+        </button>
+      </div>
     </div>
 
     <!-- RESULTS -->
     <div class="screen" id="screen-results">
-      <div class="badge" style="margin-bottom: 16px">NBA EDITION</div>
-      <div class="result-badge-wrap" id="result-badge"></div>
-      <div class="result-score" id="result-score">0</div>
-      <div class="result-sub" id="result-sub">0 / 15 correct</div>
-      <div class="result-emoji" id="result-emoji"></div>
-      <div class="result-verdict" id="result-verdict"></div>
-      <button class="btn-share" onclick="shareResult()">SHARE RESULT</button>
-      <button class="btn-outline" onclick="goLobby()">
-        PLAY AGAIN TOMORROW
-      </button>
+      <div class="results-body">
+        <p class="results-date" id="results-date"></p>
+        <div class="badge-circle" id="result-badge" style="display: none"></div>
+        <div class="results-score" id="result-score"></div>
+        <div class="dot-grid" id="result-dot-grid"></div>
+        <div class="stat-rows">
+          <div class="stat-row">
+            <span class="stat-label">Correct</span>
+            <span class="stat-value correct" id="stat-correct"></span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Wrong</span>
+            <span class="stat-value wrong" id="stat-wrong"></span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Accuracy</span>
+            <span class="stat-value" id="stat-accuracy"></span>
+          </div>
+        </div>
+      </div>
+      <div class="results-actions">
+        <button class="btn-primary" onclick="shareResult()">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+            <path
+              d="M10 3L10 6C5 6 3 9 3 13C4.5 10.5 7 9.5 10 9.5L10 12.5L14 7.5L10 3Z"
+              fill="#0A0C10"
+            />
+          </svg>
+          Share Result
+        </button>
+        <button class="btn-ghost" onclick="goLobby()">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+            <path
+              d="M10 3L4 8L10 13"
+              stroke="#8B8FA8"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          Back
+        </button>
+      </div>
     </div>
 
     <!-- ALREADY PLAYED -->
     <div class="screen" id="screen-already">
-      <div class="badge" style="margin-bottom: 16px">NBA EDITION</div>
-      <div class="already-title">ALREADY PLAYED TODAY</div>
-      <div class="already-score" id="already-score">0</div>
-      <div class="already-sub" id="already-sub">0 / 15 correct</div>
-      <div class="next-label">NEXT CHALLENGE IN</div>
-      <div class="countdown" id="countdown">--:--:--</div>
-      <button class="btn-share" onclick="shareFromAlready()">
-        SHARE RESULT
-      </button>
-      <button class="btn-outline" style="margin-top: 8px" onclick="goLobby()">
-        ← Back
-      </button>
+      <div class="played-body">
+        <p class="played-title">Already played today</p>
+        <div class="badge-circle" id="played-badge" style="display: none"></div>
+        <div class="played-score" id="already-score"></div>
+        <div class="dot-grid" id="played-dot-grid"></div>
+        <div class="played-divider"></div>
+        <p class="played-next-label">Next challenge in</p>
+        <div class="played-countdown" id="countdown">—</div>
+      </div>
+      <div class="played-actions">
+        <button class="btn-primary" onclick="shareFromAlready()">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+            <path
+              d="M10 3L10 6C5 6 3 9 3 13C4.5 10.5 7 9.5 10 9.5L10 12.5L14 7.5L10 3Z"
+              fill="#0A0C10"
+            />
+          </svg>
+          Share Result
+        </button>
+        <button class="btn-ghost" onclick="goLobby()">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+            <path
+              d="M10 3L4 8L10 13"
+              stroke="#8B8FA8"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          Back
+        </button>
+      </div>
     </div>
 
-    <div class="share-toast" id="share-toast">COPIED TO CLIPBOARD</div>
+    <div class="share-toast" id="share-toast">Copied to clipboard</div>
 
     <script>
       // ── CONFIG ──
       const SUPABASE_URL = "https://awfucyrroftnfkjscwwi.supabase.co";
-      const SUPABASE_KEY = "sb_publishable_bEIW3rmxGXnMiTDRiy7Mqg_SDnPorjF"; // replace before deploy
+      const SUPABASE_KEY = "sb_publishable_bEIW3rmxGXnMiTDRiy7Mqg_SDnPorjF";
       const CATEGORY = "nba";
       const DURATION = 90;
       const TOTAL_Q = 15;
-      const SHOW_HINT = true; // feature flag — hints always on for web v1
+      const SHOW_HINT = true;
 
       // ── STATE ──
       let questions = [];
       let currentQ = 0;
       let score = 0;
-      let hist = []; // 'correct' | 'wrong' | 'skip'
+      let hist = [];
       let correctCount = 0;
       let timerInterval = null;
       let timeLeft = DURATION;
@@ -592,7 +876,6 @@
           timeZone: "America/New_York",
         });
       }
-
       function getStorageKey() {
         return `daily-${getToday()}-${CATEGORY}`;
       }
@@ -604,6 +887,18 @@
           .forEach((s) => s.classList.remove("active"));
         document.getElementById(id).classList.add("active");
       }
+
+      // ── STREAK ──
+      (function initStreak() {
+        const streakData = JSON.parse(
+          localStorage.getItem("streak-nba") || '{"current":0}'
+        );
+        const el = document.getElementById("streak-display");
+        if (streakData.current > 0) {
+          el.textContent = `🔥 ${streakData.current}`;
+          el.style.display = "block";
+        }
+      })();
 
       // ── SUPABASE FETCH ──
       async function fetchQuestions() {
@@ -623,14 +918,11 @@
 
       // ── START ──
       async function startGame() {
-        // Check already played
         const saved = localStorage.getItem(getStorageKey());
         if (saved) {
-          const result = JSON.parse(saved);
-          showAlreadyPlayed(result);
+          showAlreadyPlayed(JSON.parse(saved));
           return;
         }
-
         show("screen-loading");
         try {
           const qs = await fetchQuestions();
@@ -657,6 +949,12 @@
       }
 
       // ── TIMER ──
+      function formatTime(s) {
+        const m = Math.floor(s / 60);
+        const sec = s % 60;
+        return `${m}:${String(sec).padStart(2, "0")}`;
+      }
+
       function startTimer() {
         clearInterval(timerInterval);
         timerInterval = setInterval(() => {
@@ -671,8 +969,13 @@
 
       function updateTimerDisplay() {
         const el = document.getElementById("timer");
-        el.textContent = timeLeft;
-        el.classList.toggle("urgent", timeLeft <= 10);
+        const fill = document.getElementById("timer-fill");
+        const pct = (timeLeft / DURATION) * 100;
+        const urgent = timeLeft <= 10;
+        el.textContent = formatTime(timeLeft);
+        el.className = "hud-value hud-time" + (urgent ? " urgent" : "");
+        fill.style.width = pct + "%";
+        fill.className = "timer-fill" + (urgent ? " urgent" : "");
       }
 
       // ── QUESTION ──
@@ -683,23 +986,14 @@
         }
         const q = questions[currentQ];
         answered = false;
-
-        // prompt
-        const pb = document.getElementById("prompt-box");
-        pb.textContent = SHOW_HINT
+        document.getElementById("prompt-box").textContent = SHOW_HINT
           ? q.prompt
           : "3 belong. 1 doesn't. Who is the imposter?";
-
-        // counter
-        document.getElementById("q-counter").textContent = `Q ${
+        document.getElementById("q-counter").textContent = `${
           currentQ + 1
         } / ${TOTAL_Q}`;
-
-        // score
         document.getElementById("score-display").textContent =
           score % 1 === 0 ? score : score.toFixed(1);
-
-        // cards
         const cards = document.getElementById("cards");
         cards.innerHTML = q.opts
           .map(
@@ -708,13 +1002,9 @@
   `
           )
           .join("");
-
-        // hide expl
         const eb = document.getElementById("expl-box");
         eb.classList.remove("show");
         eb.textContent = "";
-
-        // skip
         const skip = document.getElementById("btn-skip");
         skip.disabled = false;
         skip.style.opacity = "1";
@@ -723,19 +1013,16 @@
       function selectAnswer(idx) {
         if (answered) return;
         answered = true;
-
         const q = questions[currentQ];
         const correct = idx === q.ans;
         const cards = document
           .getElementById("cards")
           .querySelectorAll(".card");
-
         cards.forEach((c, i) => {
           c.classList.add("disabled");
           if (i === q.ans) c.classList.add("correct");
           else if (i === idx && !correct) c.classList.add("wrong");
         });
-
         if (correct) {
           score += 1;
           correctCount++;
@@ -744,17 +1031,12 @@
           score = Math.max(score - 1, -15);
           hist.push("wrong");
         }
-
         document.getElementById("score-display").textContent =
           score % 1 === 0 ? score : score.toFixed(1);
         document.getElementById("btn-skip").disabled = true;
-
-        // show explanation
         const eb = document.getElementById("expl-box");
         eb.textContent = q.explanation;
         eb.classList.add("show");
-
-        // auto advance
         setTimeout(() => advanceQuestion(), 1800);
       }
 
@@ -766,8 +1048,6 @@
         document.getElementById("score-display").textContent =
           score % 1 === 0 ? score : score.toFixed(1);
         document.getElementById("btn-skip").disabled = true;
-
-        // show answer
         const q = questions[currentQ];
         const cards = document
           .getElementById("cards")
@@ -776,21 +1056,16 @@
           c.classList.add("disabled");
           if (i === q.ans) c.classList.add("correct");
         });
-
         const eb = document.getElementById("expl-box");
         eb.textContent = q.explanation;
         eb.classList.add("show");
-
         setTimeout(() => advanceQuestion(), 1800);
       }
 
       function advanceQuestion() {
         currentQ++;
-        if (currentQ >= questions.length) {
-          endGame();
-        } else {
-          renderQuestion();
-        }
+        if (currentQ >= questions.length) endGame();
+        else renderQuestion();
       }
 
       // ── END GAME ──
@@ -798,25 +1073,54 @@
         clearInterval(timerInterval);
         const result = { score, hist, correctCount, date: getToday() };
         localStorage.setItem(getStorageKey(), JSON.stringify(result));
+        // update streak
+        const sk = "streak-nba";
+        const today = getToday();
+        const yesterday = new Date(
+          new Date().toLocaleString("en-US", { timeZone: "America/New_York" })
+        );
+        yesterday.setDate(yesterday.getDate() - 1);
+        const yd = yesterday.toLocaleDateString("en-CA", {
+          timeZone: "America/New_York",
+        });
+        const streak = JSON.parse(
+          localStorage.getItem(sk) || '{"current":0,"lastPlayed":null}'
+        );
+        const newStreak = streak.lastPlayed === yd ? streak.current + 1 : 1;
+        localStorage.setItem(
+          sk,
+          JSON.stringify({ current: newStreak, lastPlayed: today })
+        );
         showResults(result);
       }
 
       // ── RESULTS ──
       function getBadge(s) {
         if (s >= 15) return { emoji: "💎", label: "PERFECT" };
-        if (s >= 13) return { emoji: "🥇", label: "GOLD" };
+        if (s >= 14) return { emoji: "🥇", label: "GOLD" };
         if (s >= 11) return { emoji: "🥈", label: "SILVER" };
         if (s >= 9) return { emoji: "🥉", label: "BRONZE" };
         return { emoji: "", label: "" };
       }
 
-      function getVerdict(s) {
-        if (s >= 15) return "BASKETBALL IQ: PERFECT";
-        if (s >= 13) return "BASKETBALL IQ: ELITE";
-        if (s >= 11) return "BASKETBALL IQ: SOLID";
-        if (s >= 9) return "BASKETBALL IQ: DECENT";
-        if (s >= 5) return "KEEP WATCHING";
-        return "WATCH MORE NBA";
+      function buildDotGrid(h) {
+        const rows = [h.slice(0, 5), h.slice(5, 10), h.slice(10, 15)];
+        return rows
+          .map((row) => {
+            const dots = row
+              .map((r) => {
+                const cls =
+                  r === "correct"
+                    ? "dot-correct"
+                    : r === "wrong"
+                    ? "dot-wrong"
+                    : "dot-skip";
+                return `<div class="dot ${cls}"></div>`;
+              })
+              .join("");
+            return `<div class="dot-row">${dots}</div>`;
+          })
+          .join("");
       }
 
       function buildEmojiGrid(h) {
@@ -824,34 +1128,49 @@
           r === "correct" ? "🟩" : r === "wrong" ? "🟥" : "⬜"
         );
         let rows = [];
-        for (let i = 0; i < emojis.length; i += 5) {
+        for (let i = 0; i < emojis.length; i += 5)
           rows.push(emojis.slice(i, i + 5).join(""));
-        }
         return rows.join("\n");
       }
 
       function showResults(result) {
         const { score: s, hist: h, correctCount: cc } = result;
         const badge = getBadge(s);
-        document.getElementById("result-badge").textContent = badge.emoji;
+        const wrongCount = h.filter((x) => x === "wrong").length;
+        const today = new Date().toLocaleDateString("en-US", {
+          timeZone: "America/New_York",
+          month: "long",
+          day: "numeric",
+          year: "numeric",
+        });
+        document.getElementById("results-date").textContent = `NBA · ${today}`;
+        const badgeEl = document.getElementById("result-badge");
+        if (badge.emoji) {
+          badgeEl.textContent = badge.emoji;
+          badgeEl.style.display = "flex";
+        } else badgeEl.style.display = "none";
         document.getElementById("result-score").textContent =
           s % 1 === 0 ? s : s.toFixed(1);
-        document.getElementById(
-          "result-sub"
-        ).textContent = `${cc} / ${h.length} correct`;
-        document.getElementById("result-emoji").textContent = buildEmojiGrid(h);
-        document.getElementById("result-verdict").textContent = getVerdict(s);
+        document.getElementById("result-dot-grid").innerHTML = buildDotGrid(h);
+        document.getElementById("stat-correct").textContent = cc;
+        document.getElementById("stat-wrong").textContent = wrongCount;
+        document.getElementById("stat-accuracy").textContent =
+          Math.round((cc / h.length) * 100) + "%";
         show("screen-results");
       }
 
       // ── ALREADY PLAYED ──
       function showAlreadyPlayed(result) {
-        const { score: s, hist: h, correctCount: cc } = result;
+        const { score: s, hist: h } = result;
+        const badge = getBadge(s);
+        const badgeEl = document.getElementById("played-badge");
+        if (badge.emoji) {
+          badgeEl.textContent = badge.emoji;
+          badgeEl.style.display = "flex";
+        } else badgeEl.style.display = "none";
         document.getElementById("already-score").textContent =
           s % 1 === 0 ? s : s.toFixed(1);
-        document.getElementById(
-          "already-sub"
-        ).textContent = `${cc} / ${h.length} correct`;
+        document.getElementById("played-dot-grid").innerHTML = buildDotGrid(h);
         show("screen-already");
         startCountdown();
       }
@@ -868,11 +1187,9 @@
           const h = Math.floor(diff / 3600000);
           const m = Math.floor((diff % 3600000) / 60000);
           const s = Math.floor((diff % 60000) / 1000);
-          document.getElementById("countdown").textContent = `${String(
-            h
-          ).padStart(2, "0")}h ${String(m).padStart(2, "0")}m ${String(
-            s
-          ).padStart(2, "0")}s`;
+          document.getElementById("countdown").textContent = `${h}h ${String(
+            m
+          ).padStart(2, "0")}m ${String(s).padStart(2, "0")}s`;
         }
         update();
         clearInterval(nextTimer);
@@ -890,9 +1207,9 @@
         });
         const emojiRow = buildEmojiGrid(h);
         const scoreStr = s % 1 === 0 ? s : s.toFixed(1);
-        return `🕵️ Daily Imposter\nNBA Edition — ${today}\n${
+        return `NBA · Odd One Out\n${today}\n${
           badge.emoji ? badge.emoji + " " : ""
-        }${scoreStr}/15\n${emojiRow}\nhttps://oddoneout.app/nba`;
+        }${scoreStr}/15\n\n${emojiRow}\n\nhttps://oddoneout.app/nba`;
       }
 
       function getStoredResult() {
@@ -903,15 +1220,11 @@
       }
 
       function shareResult() {
-        const result = getStoredResult();
-        const text = buildShareText(result);
-        copyShare(text);
+        copyShare(buildShareText(getStoredResult()));
       }
 
       function shareFromAlready() {
-        const result = getStoredResult();
-        const text = buildShareText(result);
-        copyShare(text);
+        copyShare(buildShareText(getStoredResult()));
       }
 
       function copyShare(text) {
