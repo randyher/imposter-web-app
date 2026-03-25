@@ -447,7 +447,9 @@ let nextTimer = null;
 
 // ── DATE ──
 function getToday(){
-  return new Date().toLocaleDateString('en-CA',{timeZone:'America/New_York'});
+  const today = new Date().toLocaleDateString('en-CA',{timeZone:'America/New_York'});
+  alert('Date being sent to Supabase: ' + today);
+  return today;
 }
 
 function getStorageKey(){
