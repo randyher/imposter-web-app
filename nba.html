@@ -437,25 +437,22 @@
         outline: none;
         -webkit-appearance: none;
       }
-      .card:hover {
-        border-color: rgba(255, 255, 255, 0.18);
-        background: rgba(255, 255, 255, 0.08);
+      @media (hover: hover) {
+        .card:hover {
+          border-color: rgba(255, 255, 255, 0.18);
+          background: rgba(255, 255, 255, 0.08);
+        }
       }
       .card:active {
         transform: scale(0.98);
       }
-      .card:focus {
-        outline: none;
-        background: rgba(255, 255, 255, 0.05);
-        border-color: var(--color-border);
-      }
-      .card:focus-visible {
-        outline: none;
-        background: rgba(255, 255, 255, 0.05);
-        border-color: var(--color-border);
-      }
+      .card:focus,
+      .card:focus-visible,
       .card:-moz-focusring {
         outline: none;
+        background: rgba(255, 255, 255, 0.05);
+        border-color: var(--color-border);
+        box-shadow: none;
       }
       .card.correct {
         background: var(--color-correct-bg);
@@ -1012,19 +1009,24 @@
         document.getElementById("score-display").textContent =
           score % 1 === 0 ? score : score.toFixed(1);
         const cardsEl = document.getElementById("cards");
+        // Temporarily disable pointer events so iOS hover state can't latch onto new cards
+        cardsEl.style.pointerEvents = "none";
         cardsEl.innerHTML = q.opts
           .map(
             (opt, i) => `
-    <button class="card" onclick="selectAnswer(${i})">${opt}</button>
+    <button class="card" onclick="selectAnswer(${i})" tabindex="-1">${opt}</button>
   `
           )
           .join("");
-        // Force blur on every new card to prevent iOS from carrying over
-        // hover/focus state from the previously tapped position
+        document.activeElement?.blur();
+        // Re-enable after a short delay — long enough for iOS to clear the hover state
         setTimeout(() => {
-          document.activeElement?.blur();
-          cardsEl.querySelectorAll(".card").forEach((c) => c.blur());
-        }, 0);
+          cardsEl.style.pointerEvents = "";
+          cardsEl.querySelectorAll(".card").forEach((c) => {
+            c.removeAttribute("tabindex");
+            c.blur();
+          });
+        }, 300);
         const eb = document.getElementById("expl-box");
         eb.classList.remove("show");
         eb.textContent = "";
