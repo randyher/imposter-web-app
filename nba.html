@@ -1011,14 +1011,20 @@
         } / ${TOTAL_Q}`;
         document.getElementById("score-display").textContent =
           score % 1 === 0 ? score : score.toFixed(1);
-        const cards = document.getElementById("cards");
-        cards.innerHTML = q.opts
+        const cardsEl = document.getElementById("cards");
+        cardsEl.innerHTML = q.opts
           .map(
             (opt, i) => `
     <button class="card" onclick="selectAnswer(${i})">${opt}</button>
   `
           )
           .join("");
+        // Force blur on every new card to prevent iOS from carrying over
+        // hover/focus state from the previously tapped position
+        setTimeout(() => {
+          document.activeElement?.blur();
+          cardsEl.querySelectorAll(".card").forEach((c) => c.blur());
+        }, 0);
         const eb = document.getElementById("expl-box");
         eb.classList.remove("show");
         eb.textContent = "";
